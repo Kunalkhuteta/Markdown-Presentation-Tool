@@ -222,6 +222,9 @@ const Editor = () => {
           const themeRes = await api.get(`/themes/get-theme/${presentation.theme}`);
           setSelectedTheme(themeRes.data.data);
         }
+        else{
+          toast.info("This presentation has no theme applied. Please Apply a theme.");
+        }
       } catch (err) {
         console.error("Error loading presentation:", err);
       }
@@ -241,6 +244,15 @@ const Editor = () => {
         });
         toast.success("Presentation updated successfully!");
       } else {
+        if(!title){
+          toast.error("Title is required to create a presentation");
+        }
+        else if(!markdown){
+          toast.error("Content is required to create a presentation");
+        }
+        else if(!selectedTheme){
+          toast.error("Please select a theme before creating a presentation");
+        }
         const res = await api.post("/presentations/create-new-presentation", {
           title,
           content: markdown,
@@ -251,7 +263,10 @@ const Editor = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error("Failed to save presentation");
+
+      if( title && markdown && selectedTheme ){
+        toast.error("Failed to save presentation. Please try again.");
+      }
     } finally {
       setIsSaving(false);
     }
