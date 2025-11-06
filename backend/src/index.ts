@@ -15,7 +15,8 @@ const PORT = process.env.PORT || 3000;
 app.use(helmet());
 // app.use(morgan("combined"));
 app.use(cors({
-    origin: "http://localhost:5173",
+  origin: ["http://localhost:5173",
+  "https://markdown-presentation-tool.vercel.app/"],
     credentials: true,
 }))
 app.use(cookieParser());
